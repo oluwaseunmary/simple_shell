@@ -28,7 +28,8 @@ char *pathfinder(char *arg)
 			strcat(pathcheck, "/");
 			strcat(pathcheck, arg);
 
-			if (stat(pathcheck, &buffer) == 0 && S_ISREG(buffer.st_mode) && (buffer.st_mode & S_IXUSR))
+			if (stat(pathcheck, &buffer) == 0 && S_ISREG(buffer.st_mode)
+					&& (buffer.st_mode & S_IXUSR))
 			{
 				free(pathdup);
 				return (pathcheck);

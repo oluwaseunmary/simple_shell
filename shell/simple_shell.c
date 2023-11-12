@@ -1,10 +1,9 @@
 #include "shell.h"
 int main(int argc, char **argv, char **env);
-/*
- * main - The entry functio of the code
- * responsible for the execution of the shell command program.
- * @main: main function
+/**
+ * main - The entry point of the shell program
  * @argc: Argument count
+ * @env: The current environment
  * @argv: Argument vector
  *
  * Return: 0

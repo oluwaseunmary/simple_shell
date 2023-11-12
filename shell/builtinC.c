@@ -1,8 +1,8 @@
 #include "shell.h"
 /**
- * @getBuiltin: functon that execute the built in commands
+ * getBuiltin - execute the built-in commands in shell program
  * @cmd: argument to store the command input
- * @args: - array of arguments to store main user input
+ * @args: array of arguments to store main user input
  *
  * Return: -1 when unsucessful
  */
