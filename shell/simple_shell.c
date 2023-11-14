@@ -18,13 +18,13 @@ int main(int argc, char **argv, char **env)
 	size_t len = strlen(prompt);
 	ssize_t charreader;
 	int wstatus;
-	int value, i = 0;
+	int value, q = 0;
 	const char *delimeter = " ";
 	char *arg;
 	pid_t processid;
 	char *new_args[1024];
 
-	while (1)
+	while (true)
 	{
 		if (isatty(0))
 		{
@@ -40,16 +40,16 @@ int main(int argc, char **argv, char **env)
 		if (buffer[charreader - 1] == '\n')
 			buffer[charreader - 1] = '\0';
 
-		i = 0;
+		q = 0;
 
 		arg = strtok(buffer, delimeter);
 		while (arg != NULL)
 		{
-			new_args[i] = arg;
+			new_args[q] = arg;
 			arg = strtok(NULL, delimeter);
-			i++;
+			q = q + 1;
 		}
-		new_args[i] = NULL;
+		new_args[q] = NULL;
 		if (strcmp(new_args[0], "exit") == 0)
 		{
 			free(buffer);

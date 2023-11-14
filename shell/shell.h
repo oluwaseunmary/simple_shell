@@ -9,6 +9,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <errno.h>
+#include <stdbool.h>
 
 int main(int argc, char **argv, char **env);
 char *pathfinder(char *arg);
