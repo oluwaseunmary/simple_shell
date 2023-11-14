@@ -75,7 +75,7 @@ int main(int argc, char **argv, char **env)
 			}
 			if (processid == 0)
 			{
-				value = execvp(pathexec, new_args);
+				value = execve(pathexec, new_args, NULL);
 				if (value == -1)
 				{
 					perror("Error in Execution, Command not found");
