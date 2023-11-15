@@ -3,15 +3,14 @@ int main(int argc, char **argv, char **env);
 /**
  * main - The entry point of the shell program
  * @argc: Argument count
- * @env: The current environment
- * @argv: Argument vector
+ * @argv: argument vector
+ * @env: environment argument
  *
  * Return: 0
  */
 
 int main(int argc, char **argv, char **env)
 {
-	(void) argc;
 	char *prompt = "CMD$ ";
 	char *buffer = NULL;
 	size_t input = 0;
@@ -20,9 +19,14 @@ int main(int argc, char **argv, char **env)
 	int wstatus;
 	int value, q = 0;
 	const char *delimeter = " ";
-	char *arg;
 	pid_t processid;
+	char *arg;
 	char *new_args[1024];
+	int Dbuiltin;
+
+	(void)argc;
+	(void)argv;
+	(void)env;
 
 	while (true)
 	{
@@ -33,7 +37,7 @@ int main(int argc, char **argv, char **env)
 		charreader = getline(&buffer, &input, stdin);
 		if (charreader == -1)
 		{
-			perror("Exiting Shell...");
+			perror("Error reading input, Exiting Shell...");
 			free(buffer);
 			exit(0);
 		}
@@ -55,7 +59,7 @@ int main(int argc, char **argv, char **env)
 			free(buffer);
 			exit(0);
 		}
-		int Dbuiltin = getBuiltin(new_args[0], new_args);
+		Dbuiltin = getBuiltin(new_args[0], new_args);
 
 		if (!Dbuiltin)
 		{
