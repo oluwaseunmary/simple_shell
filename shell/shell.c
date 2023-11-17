@@ -2,11 +2,12 @@
 int main(void);
 /**
  * main - function that hold shell.
+ * pathfinder - funtion that checks path of the file
  * @void:
+ * @arg: argument count
  *
  * Return: 0
  */
-
 int main(void)
 {
 	char *prompt = "CMD$ ";
@@ -20,7 +21,7 @@ int main(void)
 	const char *delimeter = " ";
 	char *new_args[1024];
 	char *arg;
-	int Dbuiltin;
+	char *file_path(void);
 
 	while (true)
 	{

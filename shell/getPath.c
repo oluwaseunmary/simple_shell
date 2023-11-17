@@ -16,6 +16,17 @@ char *pathfinder(char *arg)
 
 	struct stat buffer;
 
+	if (path == NULL)
+	{
+		perror("Error getting path");
+		return(NULL);
+	}
+	pathdup = strdup(path);
+	if (pathdup == NULL)
+	{
+		perror("Error duplicating Path");
+		return(NULL);
+	}
 	while (dir)
 	{
 		size_t cmdLen = strlen(arg);
