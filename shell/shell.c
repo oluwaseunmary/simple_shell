@@ -20,11 +20,11 @@ int main(void)
 	const char *delimeter = " ";
 	char *new_args[1024];
 	char *arg;
-	
-	while (1)
+	int Dbuiltin;
+
+	while (true)
 	{
 		write(fileno(stdout), prompt, len);
-		
 		charreader = getline(&buffer, &input, stdin);
 		if (charreader == -1)
 		{
@@ -35,7 +35,6 @@ int main(void)
 		if (buffer[charreader - 1] == '\n')
 			buffer[charreader - 1] = '\0';
 		q = 0;
-		
 		arg = strtok(buffer, delimeter);
 		while (arg != NULL)
 		{
