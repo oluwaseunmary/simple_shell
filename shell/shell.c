@@ -1,10 +1,13 @@
 #include "shell.h"
 int main(void);
+int getBuiltin(char *cmd, char *args[]);
 /**
  * main - function that hold shell.
- * pathfinder - funtion that checks path of the file
+ * getBuiltin - funtion that handle builtin of the file
  * @void:
  * @arg: argument count
+ * @cmd: command 
+ * @args: argument to be taken
  *
  * Return: 0
  */
@@ -43,6 +46,10 @@ int main(void)
 			arg = strtok(NULL, delimeter);
 		}
 		new_args[q] = NULL;
+		if (getBuiltin(new_args[0], new_args))
+		{
+			continue;
+		}
 		processid = fork();
 		if (processid == -1)
 		{
