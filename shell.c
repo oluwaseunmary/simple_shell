@@ -1,75 +1,51 @@
 #include "shell.h"
-int main(void);
-int getBuiltin(char *cmd, char *args[]);
+
 /**
- * main - function that hold shell.
- * getBuiltin - funtion that handles builtin functions of the file
- * @void:
- * @cmd: command
- * @args: array of arguments
- *
+ * main - entry point
+ * @arc: args count
+ * @arv: arg vectors count
  * Return: 0
  */
-int main(void)
+
+int main(int arc, char *arv[])
 {
-	char *prompt = "CMD$ ";
-	char *buffer = NULL;
-	size_t input = 0;
-	size_t len = strlen(prompt);
-	ssize_t charreader;
-	pid_t processid;
-	int wstatus;
-	int value;
-	const char *delimeter = " ";
-	char *new_args[1024];
-	char *arg;
-	int q = 0;
-	
+	int output;
+	char *prom = "$ ", *buf_cmd = NULL;
+	ssize_t cmd;
+	size_t buf_siz = 0;
+
+	setenv("PATH", "/bin:/usr/bin:/usr/local/bin", 1);
+	if (arc > 1)
+		return (cmd_ex(arv[1]));
 	while (true)
 	{
-		write(fileno(stdout), prompt, len);
-		charreader = getline(&buffer, &input, stdin);
-		if (charreader == -1)
+		if (isatty(STDIN_FILENO))
 		{
-			perror("Exiting Shell...");
-			free(buffer);
-			exit(0);
+			write(STDOUT_FILENO, prom, 2), cmd = get_cmd(&buf_cmd, &buf_siz);
+		} else
+		{
+			if (getline(&buf_cmd, &buf_siz, stdin) == -1)
+				break;
+			cmd = strl_en(buf_cmd);
 		}
-		if (buffer[charreader - 1] == '\n')
-			buffer[charreader - 1] = '\0';
-		q = 0;
-		arg = strtok(buffer, delimeter);
-		while (arg != NULL)
+		if (cmd == (ssize_t)-1)
 		{
-			new_args[q++] = arg;
-			arg = strtok(NULL, delimeter);
-		}
-		new_args[q] = NULL;
-		if (getBuiltin(new_args[0], new_args))
-		{
-			continue;
-		}
-		processid = fork();
-		if (processid == -1)
-		{
-			perror("Forking unsuccessful");
-			free(buffer);
+			perror("Error in read line"), mem_clear(buf_cmd);
 			return (-1);
 		}
-		if (processid == 0)
+		if (buf_cmd[cmd - 1] == '\n')
+			buf_cmd[cmd - 1] = '\0';
+		if (str_cmp(buf_cmd, "exit") == 0)
 		{
-			value = execvp(new_args[0], new_args);
-			if (value == -1)
-			{
-				perror("Error in Execution");
-				exit(1);
-			}
+			mem_clear(buf_cmd);
+			return (0);
 		}
-		else
+		output = cmd_ex(buf_cmd);
+		if (output == -1)
 		{
-			wait(&wstatus);
-		}
-	}
-	free(buffer);
+			mem_clear(buf_cmd);
+			return (0);
+		}}
+	mem_clear(buf_cmd);
 	return (0);
 }
