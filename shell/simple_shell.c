@@ -1,32 +1,30 @@
 #include "shell.h"
-int main(int argc, char **argv, char **env);
+int main(void);
 /**
  * main - The entry point of the shell program
  * @argc: Argument count
  * @argv: argument vector
  * @env: environment argument
+ * @void: takes no parameter
  *
  * Return: 0
  */
 
-int main(int argc, char **argv, char **env)
+int main(void)
 {
 	char *prompt = "CMD$ ";
 	char *buffer = NULL;
 	size_t input = 0;
 	size_t len = strlen(prompt);
 	ssize_t charreader;
-	int wstatus;
+	int wstatus(void);
 	int value, q = 0;
 	const char *delimeter = " ";
 	pid_t processid;
 	char *arg;
 	char *new_args[1024];
 	int Dbuiltin;
-
-	(void)argc;
-	(void)argv;
-	(void)env;
+	int freeBuffer = 0;
 
 	while (true)
 	{
@@ -49,51 +47,66 @@ int main(int argc, char **argv, char **env)
 		arg = strtok(buffer, delimeter);
 		while (arg != NULL)
 		{
-			new_args[q] = arg;
+			new_args[q++] = arg;
 			arg = strtok(NULL, delimeter);
-			q = q + 1;
 		}
 		new_args[q] = NULL;
+		if (q > 0)
+		{
 		if (strcmp(new_args[0], "exit") == 0)
 		{
+			if (freeBuffer)
+			{
 			free(buffer);
+			}
 			exit(0);
 		}
 		Dbuiltin = getBuiltin(new_args[0], new_args);
 
 		if (!Dbuiltin)
 		{
-			char *pathexec = pathfinder(new_args[0]);
 
-			if (pathexec == NULL)
-			{
-				perror("Error in Path");
-				continue;
-			}
-			processid = fork();
-			if (processid == -1)
-			{
-				perror("Forking unsuccessful");
-				free(buffer);
-				return (-1);
-			}
-			if (processid == 0)
-			{
-				value = execve(pathexec, new_args, NULL);
-				if (value == -1)
-				{
-					perror("Error in Execution, Command not found");
-					exit(1);
+					char *pathexec = pathfinder(new_args[0]);
+					if (pathexec == NULL)
+					{
+						perror("Error in Path");
+					}
+					processid = fork();
+					if (processid == -1)
+					{
+						perror("Forking unsuccessful");
+						freeBuffer = 1;
+						free(buffer);
+						free(pathexec);
+						return (-1);
+					}
+					if (processid == 0)
+					{
+						value = execve(pathexec, new_args, NULL);
+						if (value == -1)
+						{
+							perror("Error in execution");
+							free(buffer);
+							free(pathexec);
+							exit(1);
+						}
+					}
 				}
-		}
+			}
 			else
 			{
-				wait(&wstatus);
+				wait(NULL);
 			}
+
 			free(pathexec);
 		}
+		}
+		if (freeBuffer)
+		{
+		free(buffer);
+		freeBuffer = 0;
+		}
 	}
-	free(buffer);
 	return (0);
 
 }

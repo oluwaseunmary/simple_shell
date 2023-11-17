@@ -11,7 +11,9 @@
 #include <errno.h>
 #include <stdbool.h>
 
-int main(int argc, char **argv, char **env);
+#define MAX_ARGS 1024
+
+int main(void);
 char *pathfinder(char *arg);
 int getBuiltin(char *cmd, char *args[]);
 
